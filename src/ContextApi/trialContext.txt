@@ -1,0 +1,15 @@
+import { createContext } from 'react';
+
+const trialContext = createContext();
+
+//the Context has two properties: 
+    // the Provider and the Consumer
+        // the Provider allows for declaration of 
+            //data to be availed throughout the component tree
+        //The consumer allows components in the component tree to be
+            // availed the data
+//A context is typically created for every unique piece of data that    
+    //needs to be available throughout the component tree.
+//The provider has a alue prop that carries the data needed for the 
+    //children in the application
+//
