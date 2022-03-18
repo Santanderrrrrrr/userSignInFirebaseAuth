@@ -13,6 +13,10 @@ import { Button,
   Box,
   Typography,
   Container } from '@mui/material';
+import { FacebookLoginButton, 
+    GoogleLoginButton, 
+    InstagramLoginButton, 
+    TwitterLoginButton } from "react-social-login-buttons";
 
 
 function Copyright(props) {
@@ -20,7 +24,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Dla disertacja
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -124,7 +128,11 @@ export default function SignIn() {
             >
               {isLoading?"Signing in...": "Sign In"}
             </Button>
-            <Grid container>
+
+
+            
+
+            <Grid container sx={{mb: 2 }}>
               <Grid item xs>
                 <Link href="/" variant="body2">
                   Forgot password?
@@ -136,9 +144,26 @@ export default function SignIn() {
                 </Link>
               </Grid>
             </Grid>
+
+
+            {/*social login buttons*/}
+            <Box
+              sx={{
+                marginTop: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <GoogleLoginButton  onClick={() => alert("Hello")} />
+              <InstagramLoginButton onClick={() => alert("Hello")} />
+              <FacebookLoginButton onClick={() => alert("Hello")} />
+              <TwitterLoginButton onClick={() => alert("Hello")} />
+            </Box>  
+
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ mt: 3, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

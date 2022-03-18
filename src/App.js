@@ -13,18 +13,12 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Signin />} />
-        {token == ""? (
-          <>
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<SignUp />} />
-          </>
-
-        ):(
-          ""
-        )}
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<SignUp />} />
+              
         <Route path='/*' element={token ? <Home/>:<Signin />} />
         
-        <Route path="/Home" element={<Home/>}/>
+        <Route path="/Home" element={token? (<Home/>):(<Signin />)}/>
       </Routes>
     </BrowserRouter>
   );
