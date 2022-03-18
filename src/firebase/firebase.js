@@ -26,6 +26,8 @@ const app = initializeApp({
 //   })
 // }
 
+
+
 export const auth = getAuth(app);
 export const so = signOut(auth);
 export default app
