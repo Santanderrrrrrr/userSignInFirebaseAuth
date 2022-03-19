@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 import {GlobalContext} from '../ContextApi/GlobalContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { onAuthStateChanged } from 'firebase/auth';
 import { Button,
   CssBaseline,
   TextField,
@@ -13,13 +14,15 @@ import { Button,
   Box,
   Typography,
   Container } from '@mui/material';
-import { FacebookLoginButton, 
-    GoogleLoginButton, 
-    InstagramLoginButton, 
-    TwitterLoginButton } from "react-social-login-buttons";
+import SocialSignInButtons from './SocialLoginButtons'
+
+
+
 
 
 function Copyright(props) {
+
+  
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -46,10 +49,26 @@ export default function SignIn() {
 
   const navigate = useNavigate(   )
 
-  const  {signIn, isLoading, token, isSigninError, loginError}  = useContext(GlobalContext);
+  const  { signIn,
+    isLoading, 
+    token,
+    setIsSigninError, 
+    isSigninError, 
+    loginError, 
+    auth, 
+    user }  = useContext(GlobalContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const monitorAuthState=async()=>{
+  //   onAuthStateChanged(auth, user=>{
+  //       user ? setIsSigninError(false) : setIsSigninError(true)   
+  //   })
+  // }
+
+  // useEffect(() => {
+  //   monitorAuthState(auth, user)
+  // }, [user])
 
   const signin =async(e)=>{
     e.preventDefault();
@@ -57,8 +76,10 @@ export default function SignIn() {
       email, password
     }
     await signIn(data);
+    console.log(isSigninError)
     
-    navigate(isSigninError? "/Signin":"/Home")
+    
+    navigate(isLoading? "/Signin":"/Home")
 
   }
     
@@ -129,7 +150,7 @@ export default function SignIn() {
               {isLoading?"Signing in...": "Sign In"}
             </Button>
 
-
+            <SocialSignInButtons />
             
 
             <Grid container sx={{mb: 2 }}>
@@ -146,20 +167,7 @@ export default function SignIn() {
             </Grid>
 
 
-            {/*social login buttons*/}
-            <Box
-              sx={{
-                marginTop: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <GoogleLoginButton  onClick={() => alert("Hello")} />
-              <InstagramLoginButton onClick={() => alert("Hello")} />
-              <FacebookLoginButton onClick={() => alert("Hello")} />
-              <TwitterLoginButton onClick={() => alert("Hello")} />
-            </Box>  
+            
 
           </Box>
         </Box>

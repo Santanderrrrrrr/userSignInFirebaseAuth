@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword,  signInWithEmailAndPassword } from "firebase/auth"
 import  {auth, so }  from '../firebase/firebase'
-import { onAuthStateChanged } from "firebase/auth";
 
 export const GlobalContext = createContext({});
 
@@ -11,15 +10,11 @@ const GlobalProvider=({children})=>{
     const [isLoading, setIsLoading] = useState(false);
     const [isSigninError, setIsSigninError] = useState(true);
     const [loginError, setLoginError] = useState("");
-    const [user, setUser] = useState("");
+    const [user, setUser] = useState({});
 
     
 
-    const monitorAuthState=async()=>{
-        onAuthStateChanged(auth, user=>{
-            user ? setIsSigninError(false) : setIsSigninError(true)   
-        })
-    }
+    
 
     const signUp=async({email, password})=>{
         setIsLoading(true);
@@ -29,29 +24,33 @@ const GlobalProvider=({children})=>{
             email="";
             password="";
         }
-    }
+   }
 
     
 
     const signIn=async({email, password})=>{
         setIsLoading(true);
         try {
-            const userCredential = await signInWithEmailAndPassword( auth, email, password)
+            await signInWithEmailAndPassword( auth, email, password).then((res)=>
             
-            if(userCredential){
-                setUser(userCredential.user)
-                email="";
-                password="";
-                localStorage.setItem("token", userCredential.user.accessToken)
-                setToken(userCredential.user.accessToken)
-            }     
+                {
+                    if(res){
+                        setUser(res.user)
+                        email="";
+                        password="";
+                        localStorage.setItem("token", res.user.accessToken)
+                        setToken(res.user.accessToken)
+                    } 
+                }
+            )
         } catch (error) {
             setLoginError(error.message);
               
         }
-        console.log({token})
+        console.log(token)
+        console.log(user)
         setIsLoading(false) 
-        monitorAuthState(auth, user)
+        
     }
 
     
@@ -62,13 +61,24 @@ const GlobalProvider=({children})=>{
         await so
         setToken("")
         localStorage.removeItem("token")
-        monitorAuthState(auth, user)
+        
     }
 
 
 
     return(
-        <GlobalContext.Provider value={{token, setToken, signIn, signUp, isLoading, logOut, isSigninError, loginError}}>
+        <GlobalContext.Provider value={{ auth,
+            user, 
+            token, 
+            setToken, 
+            signIn,
+            signUp, 
+            isLoading, 
+            logOut, 
+            setIsSigninError,
+            isSigninError, 
+            loginError
+        }}>
             {children}
         </GlobalContext.Provider>
     )
