@@ -1,13 +1,29 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { FacebookLoginButton, 
-    GoogleLoginButton, 
-    InstagramLoginButton, 
+    GoogleLoginButton,  
     TwitterLoginButton } from "react-social-login-buttons";
-    import { 
-        Box } from '@mui/material';
+import {Box } from '@mui/material';
+import {GlobalContext} from '../ContextApi/GlobalContext'
+import {useNavigate} from 'react-router-dom';
+
 
 const SocialSignInButtons=()=>{
 
+    const {googleSignIn, 
+        isLoading,
+        facebookSignIn,
+        twitterSignIn} = useContext(GlobalContext);
+      const navigate = useNavigate()
+
+    const googleSi=async()=>{
+        await googleSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
+    }
+    // const facebookSi=async()=>{
+    //     await facebookSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
+    // }
+    const twitterSi=async()=>{
+        await twitterSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
+    }
 
 
     return (
@@ -21,10 +37,9 @@ const SocialSignInButtons=()=>{
                 alignItems: 'center',
               }}
             >
-              <GoogleLoginButton  onClick={() => alert("Hello")} />
-              <InstagramLoginButton onClick={() => alert("Hello")} />
-              <FacebookLoginButton onClick={() => alert("Hello")} />
-              <TwitterLoginButton onClick={() => alert("Hello")} />
+              <GoogleLoginButton  onClick={googleSi} />
+              {/* <FacebookLoginButton onClick={facebookSi} /> */}
+              <TwitterLoginButton onClick={twitterSi} />
             </Box>  
         
         </>

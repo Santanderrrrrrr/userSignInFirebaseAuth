@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
 import {GlobalContext} from '../ContextApi/GlobalContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { onAuthStateChanged } from 'firebase/auth';
 import { Button,
   CssBaseline,
   TextField,
@@ -22,7 +21,7 @@ import SocialSignInButtons from './SocialLoginButtons'
 
 function Copyright(props) {
 
-  
+
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -47,16 +46,16 @@ export default function SignIn() {
 //     });
 //   };
 
-  const navigate = useNavigate(   )
+  const navigate = useNavigate()
 
   const  { signIn,
     isLoading, 
     token,
-    setIsSigninError, 
+    isFacebookError,
     isSigninError, 
     loginError, 
-    auth, 
-    user }  = useContext(GlobalContext);
+     
+    }  = useContext(GlobalContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,11 +74,8 @@ export default function SignIn() {
     const data={
       email, password
     }
-    await signIn(data);
-    console.log(isSigninError)
+    await signIn(data).then(()=>navigate(isLoading? "/signin":"/home"))
     
-    
-    navigate(isLoading? "/Signin":"/Home")
 
   }
     
@@ -150,7 +146,8 @@ export default function SignIn() {
               {isLoading?"Signing in...": "Sign In"}
             </Button>
 
-            <SocialSignInButtons />
+            
+              <SocialSignInButtons />
             
 
             <Grid container sx={{mb: 2 }}>

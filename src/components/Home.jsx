@@ -17,7 +17,7 @@ const Home = () => {
             <Card>
               <CardContent>
                 <Typography component="div" variant="h3"> 
-                  Hi {user?.email }
+                  Hi {user?.displayName }
                 </Typography>
               </CardContent>  
             </Card>  

@@ -3,12 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css'
 import App from './App';
 
-import GlobalProvider from './ContextApi/GlobalContext'
+import GlobalProvider from './ContextApi/GlobalContext';
+
 
 
 ReactDOM.render(
+
   <GlobalProvider>
-    <App />
+    
+      <App />
+    
   </GlobalProvider>,
   document.getElementById('root')
 );
