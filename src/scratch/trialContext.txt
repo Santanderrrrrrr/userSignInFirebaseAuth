@@ -13,3 +13,9 @@ const trialContext = createContext();
 //The provider has a alue prop that carries the data needed for the 
     //children in the application
 //
+
+
+
+//login with facebook,
+//if error, display the error on screen and prompt for signin using regular methods
+//set signin to regular signin with facebook linking with credentials thereafter and on login, return signin to regular

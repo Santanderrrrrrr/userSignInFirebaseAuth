@@ -1,5 +1,6 @@
-import React, {useState, useContext} from 'react';
-import { FacebookLoginButton, 
+import React, { useContext} from 'react';
+import { 
+  FacebookLoginButton, 
     GoogleLoginButton,  
     TwitterLoginButton } from "react-social-login-buttons";
 import {Box } from '@mui/material';
@@ -18,9 +19,9 @@ const SocialSignInButtons=()=>{
     const googleSi=async()=>{
         await googleSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
     }
-    // const facebookSi=async()=>{
-    //     await facebookSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
-    // }
+    const facebookSi=async()=>{
+        await facebookSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
+    }
     const twitterSi=async()=>{
         await twitterSignIn().then(()=>navigate(isLoading? "/Signin":"/Home"));
     }
@@ -38,7 +39,7 @@ const SocialSignInButtons=()=>{
               }}
             >
               <GoogleLoginButton  onClick={googleSi} />
-              {/* <FacebookLoginButton onClick={facebookSi} /> */}
+              <FacebookLoginButton onClick={facebookSi} />
               <TwitterLoginButton onClick={twitterSi} />
             </Box>  
         

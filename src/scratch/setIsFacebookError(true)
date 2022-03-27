@@ -1,0 +1,16 @@
+setIsFacebookError(true)
+                const credential = FacebookAuthProvider.credentialFromError(error);
+                const email=error.customData.email;
+                fetchSignInMethodsForEmail(auth, email).then(async (methods)=>{
+                    if(methods[0]==='password'){
+                        var password = await promptUserForPassword();
+                        signInWithEmailAndPassword( auth, email, password).then((result)=>{
+                            return result.user.linkWithCredential(credential);
+                        }).then(()=>{
+                            setIsLoading(false);
+                            setIsFacebookError(false);
+                        })
+                        return
+                    }
+                    var provider = auth.currentUser.provider(methods[0]);
+                })

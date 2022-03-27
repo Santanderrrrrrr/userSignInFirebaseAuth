@@ -84,92 +84,92 @@ export default function SignIn() {
   
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          
-          <Box component="form" onSubmit={signin} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={email}
-              onChange={(e)=>setEmail(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e)=>setPassword(e.target.value)}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-
-            <Typography 
-              variant="body2" 
-              color="error" 
-              display={isSigninError? "flex":"none"}>{loginError}
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            
+            <Typography component="h1" variant="h5">
+              Sign in
             </Typography>
             
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            <Box component="form" onSubmit={signin} noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
 
-            >
-              {isLoading?"Signing in...": "Sign In"}
-            </Button>
+              <Typography 
+                variant="body2" 
+                color="error" 
+                display={isSigninError? "flex":"none"}>{loginError}
+              </Typography>
+              
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
 
-            
-              <SocialSignInButtons />
-            
+              >
+                {isLoading?"Signing in...": "Sign In"}
+              </Button>
 
-            <Grid container sx={{mb: 2 }}>
-              <Grid item xs>
-                <Link href="/" variant="body2">
-                  Forgot password?
-                </Link>
+              
+                <SocialSignInButtons />
+              
+
+              <Grid container sx={{mb: 2 }}>
+                <Grid item xs>
+                  <Link href="/" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link variant="body2" href='/signup'>
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link variant="body2" href='/signup'>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
 
 
-            
+              
 
+            </Box>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 3, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+          <Copyright sx={{ mt: 3, mb: 4 }} />
+        </Container>
+      </ThemeProvider>
   );
 }

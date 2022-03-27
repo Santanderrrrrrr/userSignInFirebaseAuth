@@ -1,12 +1,13 @@
 import { createContext, useState } from "react";
 import { createUserWithEmailAndPassword,  
+    linkWithRedirect,
     signInWithEmailAndPassword, 
     GoogleAuthProvider,
-    // FacebookAuthProvider,
+    FacebookAuthProvider,
     TwitterAuthProvider, 
     signInWithPopup,
     fetchSignInMethodsForEmail,
-    currentUser
+    
      } from "firebase/auth"
 import  {auth, so }  from '../firebase/firebase'
 
@@ -23,6 +24,7 @@ const GlobalProvider=({children})=>{
     const [currEmail, setCurrEmail] = useState('');
     const [currPassword, setCurrPassword] = useState('');
     const [isFacebookError, setIsFacebookError] = useState(false)
+    const [facebookCred, setFacebookCred] = useState(false)
 
     
 
@@ -46,10 +48,12 @@ const GlobalProvider=({children})=>{
         setIsLoading(true);
         
             await signInWithEmailAndPassword( auth, email, password).then((res)=>
-            
                 {
                     if(res){
                         setUser(res.user)
+                        if(isFacebookError){
+                            res.user.linkWithCredential(facebookCred)
+                        }
                         email="";
                         password="";
                         localStorage.setItem("token", res.user.accessToken)
@@ -58,9 +62,9 @@ const GlobalProvider=({children})=>{
                     } 
                 }
             )
-        .catch ((error)=> {
-            setLoginError(error.message);
-        })
+            .catch ((error)=> {
+                setLoginError(error.message);
+            })
         
         setIsLoading(false) 
         
@@ -85,7 +89,18 @@ const GlobalProvider=({children})=>{
         await signInWithPopup(auth, provider).then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            setToken(credential.accessToken);
+            localStorage.setItem("token", credential.accessToken)
+            setToken(credential.accessToken)
+            if(isFacebookError){
+                const provider = new FacebookAuthProvider();
+                // result.user.linkWithCredential(facebookCred)
+                linkWithRedirect(auth.currentUser, provider).then((result) => {
+                    const credential = FacebookAuthProvider.credentialFromResult(result)
+                    localStorage.setItem("token", credential.accessToken)
+                    setUser(result.user);
+                }
+                )}
+            
             // The signed-in user info.
             setUser(result.user);
             console.log(result.user);
@@ -96,52 +111,38 @@ const GlobalProvider=({children})=>{
         })
     }
 
-    const promptUserForPassword=async()=>{
-        console.log("isfacebookError")
-        return isFacebookError?{currPassword}: "";
+    
+
+
+
+    const facebookSignIn=async()=>{
+        
+        const provider = new FacebookAuthProvider();
+        provider.addScope('public_profile','email');
+
+        await signInWithPopup(auth, provider).then((result) => {
+                setUser(result.user)
+                console.log(result.user)
+                
+
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                const credential = FacebookAuthProvider.credentialFromResult(result);
+                console.log(credential)
+                setToken(credential.accessToken);
+                console.log(credential)
+                setIsLoading(false)
+
+            }).catch((error)=>{
+                if (error.message.includes("with-different-credential")){
+                    setLoginError("Account exists with different credentials. Please Sign In to link the existing email with your facebook account") ;
+                    setFacebookCred(FacebookAuthProvider.credentialFromError(error))                    
+                }
+                setIsFacebookError(true);
+            })
+            
     }
 
 
-
-    // const facebookSignIn=async()=>{
-        
-    //     const provider = new FacebookAuthProvider();
-    //     provider.addScope('public_profile','email');
-
-    //     await signInWithPopup(auth, provider)
-    //         .then((result) => {
-    //             setUser(result.user)
-    //             console.log(result.user)
-    //             // console.log(result.user)
-
-    //             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    //             const credential = FacebookAuthProvider.credentialFromResult(result);
-    //             // console.log(credential)
-    //             setToken(credential.accessToken);
-    //             // console.log(credential)
-    //             setIsLoading(false)
-    //         }).catch((error)=>{
-    //             setIsFacebookError(true)
-    //             const credential = FacebookAuthProvider.credentialFromError(error);
-    //             const email=error.customData.email;
-    //             fetchSignInMethodsForEmail(auth, email).then(async (methods)=>{
-    //                 if(methods[0]==='password'){
-    //                     var password = await promptUserForPassword();
-    //                     signInWithEmailAndPassword( auth, email, password).then((result)=>{
-    //                         return result.user.linkWithCredential(credential);
-    //                     }).then(()=>{
-    //                         setIsLoading(false);
-    //                         setIsFacebookError(false);
-    //                     })
-    //                     return
-    //                 }
-    //                 var provider = currentUser.provider(methods[0]);
-    //             })
-
-
-    //         })
-    //         console.log(isFacebookError)
-    // }
 
     const twitterSignIn=async()=>{
         
@@ -176,7 +177,7 @@ const GlobalProvider=({children})=>{
             isSigninError, 
             loginError,
             googleSignIn,
-            // facebookSignIn,
+            facebookSignIn,
             twitterSignIn,
             currEmail,
             setCurrPassword,

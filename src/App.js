@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './components/Home'
 import Signin from './components/Signin'
 import SignUp from './components/SignUp'
-import PasswordPrompt from './components/PasswordPrompt'
 import { useContext } from 'react';
 import { GlobalContext } from './ContextApi/GlobalContext'
 
@@ -16,7 +15,6 @@ function App() {
         <Route path="/" element={<Signin />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/facebookLink" element={<PasswordPrompt/>} />
               
         <Route path='/*' element={token ? <Home/>:<Signin />} />
         
